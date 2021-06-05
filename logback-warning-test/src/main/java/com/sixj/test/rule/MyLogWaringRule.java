@@ -12,7 +12,7 @@ public class MyLogWaringRule implements LogWaringRule {
 
     @Override
     public boolean verdict(String errorMessage) {
-
+        // error日志信息中包含'url'时触发告警
         return errorMessage.contains("url");
     }
 }
