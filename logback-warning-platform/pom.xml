@@ -5,7 +5,7 @@
 
     <groupId>com.sixj</groupId>
     <artifactId>logback-warning-platform</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <name>logback-warning-platform</name>
 
     <properties>

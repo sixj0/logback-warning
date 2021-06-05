@@ -4,7 +4,7 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.UnsynchronizedAppenderBase;
 import com.sixj.rule.LogWaringRule;
-import com.sixj.util.LogWarningInfoUtil;
+import com.sixj.util.LogWarningInfoFactory;
 import com.sixj.util.LogWarningInfo;
 import com.sixj.util.RobotUtil;
 import org.springframework.stereotype.Component;
@@ -24,7 +24,8 @@ public class SendErrorMsgAppender extends UnsynchronizedAppenderBase<ILoggingEve
     @Override
     public void append(ILoggingEvent event) {
         if (event.getLevel() == Level.ERROR) {
-            LogWarningInfo logWaringInfo = LogWarningInfoUtil.getLogWaringInfo();
+
+            LogWarningInfo logWaringInfo = LogWarningInfoFactory.getLogWarningInfo();
             String formattedMessage = event.getFormattedMessage();
             // 匹配规则
             LogWaringRule logWaringRule = logWaringInfo.getLogWaringRule();
@@ -61,8 +62,6 @@ public class SendErrorMsgAppender extends UnsynchronizedAppenderBase<ILoggingEve
             }
         }
     }
-
-
 
 
 }

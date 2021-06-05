@@ -1,10 +1,13 @@
 package com.sixj.util;
 
+import cn.hutool.json.JSONUtil;
 import com.sixj.rule.LogWaringRule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +18,7 @@ import java.util.Objects;
  * @date 2021-06-04-20:13
  */
 @Component
-public class LogWarningInfoLoader implements ApplicationRunner {
+public class LogWarningInfoFactory implements ApplicationRunner {
 
     @Autowired
     private LogWaringRule logWaringRule;
@@ -23,13 +26,15 @@ public class LogWarningInfoLoader implements ApplicationRunner {
     @Autowired
     private Environment environment;
 
+    private static LogWarningInfo logWarningInfo;
+
     @Override
     public void run(ApplicationArguments args) {
 
-        LogWarningInfo logWarningInfo = new LogWarningInfo();
+        logWarningInfo = new LogWarningInfo();
 
-        String webHook = environment.getProperty("dingDing.webHook");
-        String phones = environment.getProperty("dingDing.verifyClosedApplyOrder.phones");
+        String webHook = environment.getProperty("dingDing.logback.webHook");
+        String phones = environment.getProperty("dingDing.logback.phones");
         String applicationName = environment.getProperty("spring.application.name");
         logWarningInfo.setWebHook(webHook);
         logWarningInfo.setPhones(phones);
@@ -39,6 +44,9 @@ public class LogWarningInfoLoader implements ApplicationRunner {
         if(!Objects.isNull(logWaringRule)){
             logWarningInfo.setLogWaringRule(logWaringRule);
         }
-        LogWarningInfoUtil.setLogWaringInfo(logWarningInfo);
+    }
+
+    public static LogWarningInfo getLogWarningInfo(){
+        return logWarningInfo;
     }
 }
