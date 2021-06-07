@@ -11,7 +11,5 @@ public interface LogWaringRule {
      * @param errorMessage
      * @return
      */
-    default boolean verdict(String errorMessage){
-        return true;
-    }
+    boolean verdict(String errorMessage);
 }

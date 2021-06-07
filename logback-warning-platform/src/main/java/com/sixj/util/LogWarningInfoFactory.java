@@ -5,9 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 
+import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -17,11 +20,14 @@ import java.util.Objects;
 @Component
 public class LogWarningInfoFactory implements ApplicationRunner {
 
-    @Autowired
-    private LogWaringRule logWaringRule;
+    @Resource(name = "defaultLogWaringRule")
+    private LogWaringRule defaultLogWaringRule;
 
     @Autowired
     private Environment environment;
+
+    @Autowired
+    private ApplicationContext applicationContext;
 
     private static LogWarningInfo logWarningInfo;
 
@@ -38,9 +44,16 @@ public class LogWarningInfoFactory implements ApplicationRunner {
         logWarningInfo.setApplicationName(applicationName);
 
         // 获取匹配规则
-        if(!Objects.isNull(logWaringRule)){
-            logWarningInfo.setLogWaringRule(logWaringRule);
+        Map<String, LogWaringRule> rules = applicationContext.getBeansOfType(LogWaringRule.class);
+        rules.remove("defaultLogWaringRule");
+        if(rules.size() == 0){
+            logWarningInfo.setLogWaringRule(defaultLogWaringRule);
+        }else {
+            for (LogWaringRule logWaringRule : rules.values()) {
+                logWarningInfo.setLogWaringRule(logWaringRule);
+            }
         }
+
     }
 
     public static LogWarningInfo getLogWarningInfo(){
